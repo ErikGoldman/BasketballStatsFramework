@@ -1,16 +1,19 @@
 package data;
 
-import PlusMinus.Player;
 
 public class SubPlay extends Play {
+	Player inPlayer, outPlayer;
 	
-	public SubPlay(String id, String lns, String time, String team, Player inPlayer, Player outPlayer) {
+	public SubPlay(String id, String lns, String time, Player inPlayer, Player outPlayer) {
 		super(id, lns, time);
+		
+		this.inPlayer = inPlayer;
+		this.outPlayer = outPlayer;
 	}
 
 	@Override
-	public void applyToGame(GameState g) {
-		// TODO: do this correctly
+	protected void apply(GameState g) {
+		g.substitution(outPlayer, inPlayer);
 	}
 
 }

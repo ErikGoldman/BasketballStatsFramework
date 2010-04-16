@@ -41,6 +41,9 @@ public class Game {
 	public boolean isHome(String team) {
 		return team.equals(homeTeam);
 	}
+	public boolean isAway(String team) {
+		return team.equals(awayTeam);
+	}
 	
 	public String getHomeTeam() {
 		return homeTeam;

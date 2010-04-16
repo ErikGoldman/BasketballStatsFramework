@@ -3,12 +3,12 @@ package data;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import PlusMinus.Player;
 
 public abstract class Play implements Comparable<Play> {
 	private static final String shotTypes = 
 					"(pullup jump|slam dunk|driving layup|jump|3pt|" + 
-					"driving reverse layup|alley oop layup|layup|turnaround fade away|dunk|reverse layup|step back jump)",
+					"driving reverse layup|alley oop layup|layup|turnaround fade away|" +
+					"dunk|reverse layup|step back jump|tip)",
 			regBox =   "\\[(\\w+)\\] ",
 			scoreBox = "\\[(\\w+) (\\d+)-(\\d+)\\] ",
 			someBox = "(" + regBox + "|" + scoreBox + ")",
@@ -17,7 +17,8 @@ public abstract class Play implements Comparable<Play> {
 	private static final Pattern 
 		subPattern = Pattern.compile(regBox + playerStr + " Substitution replaced by " + playerStr, Pattern.CASE_INSENSITIVE),
 		scorePattern = Pattern.compile(someBox + playerStr + " " + shotTypes + " shot: (made|missed).*", Pattern.CASE_INSENSITIVE),
-		freeThrowPattern = Pattern.compile(someBox + playerStr + " free throw (\\d) of (\\d) (missed)?.*", Pattern.CASE_INSENSITIVE);
+		freeThrowPattern = Pattern.compile(someBox + playerStr + " free throw (\\d) of (\\d) (missed)?.*", Pattern.CASE_INSENSITIVE),
+		reboundPattern = Pattern.compile(regBox + playerStr + " Rebound \\(Off:(\\d+) Def:(\\d+)\\)", Pattern.CASE_INSENSITIVE);
 	
 	private Game game;
 	private int timeLeft, lineNum;
@@ -44,7 +45,7 @@ public abstract class Play implements Comparable<Play> {
 		return game + "|" + timeLeft + "|" + lineNum;
 	}
 	
-	public abstract void applyToGame(GameState g);
+	protected abstract void apply(GameState g);
 	
 	public static Play parsePlay(String id, String lineNumStr, String time, String play) {
 		// substitution
@@ -55,7 +56,7 @@ public abstract class Play implements Comparable<Play> {
 			Player outPlayer = Player.getPlayer(team, subM.group(2)),
 				   inPlayer  = Player.getPlayer(team, subM.group(3));
 			
-			return new SubPlay(id, lineNumStr, time, team, inPlayer, outPlayer);
+			return new SubPlay(id, lineNumStr, time, inPlayer, outPlayer);
 		}
 		
 		// scoring play
@@ -76,8 +77,9 @@ public abstract class Play implements Comparable<Play> {
 			}
 		
 			Player scorer = Player.getPlayer(team, scoreM.group(6));
+			String type = scoreM.group(7);
 			
-			return new ShotPlay(id, lineNumStr, time, team, scorer, teamScore, made);
+			return new ShotPlay(id, lineNumStr, time, scorer, type, teamScore, made);
 		}
 		
 		// free throw
@@ -98,11 +100,28 @@ public abstract class Play implements Comparable<Play> {
 		
 			Player scorer = Player.getPlayer(team, freeThrowM.group(6));
 			
-			return new FreeThrowPlay(id, lineNumStr, time, team, scorer, teamScore, made);
+			return new FreeThrowPlay(id, lineNumStr, time, scorer, teamScore, made);
 		}
 		
-		//System.err.println("Unrecognized: " + play);
+		// rebound
+		Matcher reboundM = reboundPattern.matcher(play);
+		if (reboundM.matches()) {
+			String team = reboundM.group(1);
+			Player player = Player.getPlayer(team, reboundM.group(2));
+			
+			int offRebound = Integer.parseInt(reboundM.group(3)),
+				defRebound = Integer.parseInt(reboundM.group(4));
+			
+			return new ReboundPlay(id, lineNumStr, time, player, offRebound, defRebound);
+		}
+		
+		System.err.println("Unrecognized: " + play);
 		return null;
+	}
+	
+	public void applyToGame(GameState g) {
+		g.updateTime(timeLeft);
+		apply(g);
 	}
 	
 	@Override
