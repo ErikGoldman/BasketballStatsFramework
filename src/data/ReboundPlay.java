@@ -3,19 +3,18 @@ package data;
 public class ReboundPlay extends Play {
 	
 	private Player player;
-	private int off, def;
+	private boolean isOffensive;
 	
-	public ReboundPlay(String id, String lns, String time, Player player, int off, int def) {
-		super(id, lns, time);
+	public ReboundPlay(String id, int time, Player[] players, Player player, boolean isOffensive) {
+		super(id, time, players);
 		
 		this.player = player;
-		this.off = off;
-		this.def = def;
+		this.isOffensive = isOffensive;
 	}
 
 	@Override
 	protected void apply(GameState g) {
-		g.rebound(player, off, def);
+		g.rebound(player, isOffensive);
 	}
 
 }

@@ -2,7 +2,7 @@ package data;
 
 public class GameState {
 	protected Game game;
-	protected int currentTime = 0;
+	protected int currentTime = 0, currentPeriod = 0;
 	
 	protected int homeScore = 0, awayScore = 0;
 
@@ -33,24 +33,25 @@ public class GameState {
 		throw new RuntimeException("Team " + team + " is not valid for the game " + game);
 	}
 	
-	public void updateTime(int newTime) {
-		handleTimeChange(currentTime, newTime);
+	public void updateTime(Player[] players, int newTime) {
+		handleTimeChange(players, currentTime, newTime);
 		currentTime = newTime;
 	}
 	
-	public void updateScore(String team, int newScore) {
-		handleScoreChange(team, newScore);
+	public void updateScore(String team, int scoreDelta) {
+		handleScoreChange(team, scoreDelta);
 		
 		if (game.isHome(team))
-			homeScore = newScore;
+			homeScore += scoreDelta;
 		else
-			awayScore = newScore;
+			awayScore += scoreDelta;
 	}
 	
 	public void shotTaken(Player p, String type, int points, boolean made) {}
-	public void freeThrow(Player p, boolean made) {}
+	public void freeThrow(Player p, int num, boolean made) {}
 	public void substitution(Player out, Player in) {}
-	public void rebound(Player out, int off, int def) {}
-	protected void handleTimeChange(int oldTime, int newTime) {}
+	public void rebound(Player out, boolean isOffensive) {}
+	public void foul(Player fouler, Player fouled, String type) {}
+	protected void handleTimeChange(Player[] players, int oldTime, int newTime) {}
 	protected void handleScoreChange(String team, int newScore) {}
 }

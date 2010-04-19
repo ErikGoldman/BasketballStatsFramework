@@ -3,35 +3,31 @@ package data;
 
 public class ShotPlay extends Play {
 	
-	protected Player scorer;
+	protected Player scorer, assist;
 	protected String type;
-	protected int newScore;
+	protected int points, x, y;
 	protected boolean made;
 	
-	public ShotPlay(String id, String lns, String time, Player player, String type, int newScore, boolean made) {
-		super(id, lns, time);
+	public ShotPlay(String id, int time, Player[] players, Player player, String type, int points, boolean made, Player assist, int x, int y) {
+		super(id, time, players);
 		
 		this.type = type;
 		this.scorer = player;
-		this.newScore = newScore;
+		this.points = points;
 		this.made = made;
+		this.x = x;
+		this.y = y;
+		this.assist = assist;
 	}
 
 	@Override
 	protected void apply(GameState g) {
-		int oldScore = g.getScore(scorer.getTeam());
-		
 		if (this.made) {
-			g.updateScore(scorer.getTeam(), newScore);
-		}
-		
-		int scoreDelta = 0;
-		if (made) {
-			scoreDelta = newScore - oldScore;
+			g.updateScore(scorer.getTeam(), points);
 		}
 		
 		// individual stats
-		g.shotTaken(scorer, type, scoreDelta, made);
+		g.shotTaken(scorer, type, points, made);
 	}
 
 }

@@ -1,17 +1,19 @@
 package PlusMinus;
 
-import data.Play;
+import data.Game;
+import data.GameState;
+import data.Player;
 
-public class PMCalc {
-	public PMCalc() {
-		
+public class PMCalc extends GameState {
+	PMData data;
+	
+	public PMCalc(Game game, PMData d) {
+		super(game);
+		this.data = d;
 	}
 	
-	private Play lastPlay = null;
-	public void addPlay(Play p) {
-		// if we started a new game
-		if (lastPlay != null && p.getGame() != lastPlay.getGame()) {
-			// TODO: add time to all active players equal to the time remaining on the last play
-		}
+	@Override
+	protected void handleTimeChange(Player[] players, int oldTime, int newTime) {
+		data.tick(players, newTime - oldTime);
 	}
 }

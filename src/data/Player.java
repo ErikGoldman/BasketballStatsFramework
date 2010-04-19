@@ -4,14 +4,23 @@ import java.util.HashMap;
 
 public class Player {
 	private String team, name;
+	private final int hash;
+	
 	private Player(String team, String name) {
 		this.team = team;
 		this.name = name;
+		
+		hash = (team + "|" + name).hashCode();
 	}
 	
 	@Override
 	public String toString() {
 		return name + "(" + team + ")";
+	}
+	
+	@Override
+	public int hashCode() {
+		return hash;
 	}
 	
 	public String getName() {

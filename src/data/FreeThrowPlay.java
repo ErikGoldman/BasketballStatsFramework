@@ -4,21 +4,20 @@ package data;
 public class FreeThrowPlay extends Play {
 	private Player player;
 	private boolean made;
-	private int newScore;
+	private int num;
 	
-	public FreeThrowPlay(String id, String lns, String time, Player player, int newScore, boolean made) {
-		super(id, lns, time);
+	public FreeThrowPlay(String id, int time, Player[] players, Player player, int num, boolean made) {
+		super(id, time, players);
 		
 		this.player = player;
 		this.made = made;
-		this.newScore = newScore;
 	}
 
 	@Override
 	protected void apply(GameState g) {
 		if (made) {
-			g.updateScore(player.getTeam(), newScore);
+			g.updateScore(player.getTeam(), 1);
 		}
-		g.freeThrow(player, made);
+		g.freeThrow(player, num, made);
 	}
 }

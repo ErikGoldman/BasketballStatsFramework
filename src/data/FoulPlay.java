@@ -2,14 +2,20 @@ package data;
 
 public class FoulPlay extends Play {
 
-	public FoulPlay(String id, String lns, String time, Player player, int newScore, boolean made) {
-		super(id, lns, time);
+	Player fouler, fouled;
+	String type;
+	
+	public FoulPlay(String id, int time, Player[] players, Player fouler, Player fouled, String type) {
+		super(id, time, players);
+		
+		this.fouler = fouler;
+		this.fouled = fouled;
+		this.type = type;
 	}
 	
 	@Override
 	protected void apply(GameState g) {
-		// TODO Auto-generated method stub
-
+		g.foul(fouler, fouled, type);
 	}
 
 }

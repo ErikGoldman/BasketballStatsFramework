@@ -4,8 +4,8 @@ package data;
 public class SubPlay extends Play {
 	Player inPlayer, outPlayer;
 	
-	public SubPlay(String id, String lns, String time, Player inPlayer, Player outPlayer) {
-		super(id, lns, time);
+	public SubPlay(String id, int time, Player[] players, Player inPlayer, Player outPlayer) {
+		super(id, time, players);
 		
 		this.inPlayer = inPlayer;
 		this.outPlayer = outPlayer;

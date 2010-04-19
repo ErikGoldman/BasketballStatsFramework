@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import parser.PbpFile;
+import parser.BballGeekFile;
 import data.GameState;
+import data.Play;
 
 public class GameRanker {
 	
@@ -35,10 +36,13 @@ public class GameRanker {
 	
 	public GameRanker(File folder) throws IOException {
 		for (File f : folder.listFiles()) {
-			PbpFile pbp = new PbpFile(f);
-			GameState g = pbp.getNewState();
-			for (int i=0; i < pbp.getNumPlays(); i++) {
-				pbp.apply(i, g);
+			if (!f.getName().endsWith(".csv")) continue;
+			
+			BballGeekFile gf = new BballGeekFile(f);
+			
+			GameState g = new GameState(gf.getGame());
+			for (Play p : gf.getPlays()) {
+				p.applyToGame(g);
 			}
 			
 			int scoreMargin;
@@ -165,7 +169,7 @@ public class GameRanker {
 	public static void main(String[] args) {
 		try {
 			System.out.println("Running score parser");
-			GameRanker sp = new GameRanker(new File("data/2009_pbp"));
+			GameRanker sp = new GameRanker(new File("data/2008_geek_pbp"));
 			
 			TeamDoublePair[] ranks = sp.computeRank();
 			for (TeamDoublePair p : ranks) {
