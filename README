@@ -34,6 +34,11 @@ override one of the public methods, like:
 
 public void shotTaken(Player p, String type, int points, boolean made)
 
+For example, if I were trying to compute every player's shooting %, I would
+store a map between each player and the number of made and missed shots. I
+would then override just this method and update my count variables whenever
+shotTaken is called.
+
 ************************** STEP THREE ********************************
 Write a main method that invokes DataSetRunner.
 
