@@ -34,6 +34,9 @@ public class Player {
 	private static HashMap<String, Player> playerMap = new HashMap<String, Player>();
 	
 	public static Player getPlayer(String team, String name) {
+		if (name == null || name.isEmpty())
+			return null;
+		
 		String pId = team + "|" + name;
 		
 		if (!playerMap.containsKey(pId)) {

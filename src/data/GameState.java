@@ -61,6 +61,10 @@ public class GameState {
 	public void substitution(Player out, Player in) {}
 	public void rebound(Player out, boolean isOffensive) {}
 	public void foul(Player fouler, Player fouled, String type) {}
+	public void turnover(Player handler, String reason, Player stealer) {}
+	public void timeout(String team, String type) {}
+	public void violation(String team, String type) {}
+	public void ejection(Player ejected, String reason) {}
 	protected void handleTimeChange(Player[] players, int oldTime, int newTime) {}
 	protected void handleScoreChange(String team, Player[] players, int scoreDelta) {}
 }
