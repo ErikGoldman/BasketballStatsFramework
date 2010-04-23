@@ -1,5 +1,16 @@
 package data;
 
+/**
+ * The main class you will deal with in order to use this framework.  The goal
+ * is to subclass this and override the methods of any event that you want to
+ * trap.
+ * 
+ * IMPORTANT NOTE: you MUST override createCopy in order for almost
+ * anything to work!  createCopy just generates a new instance of this
+ * class with any important shared data passed into it.  See the example
+ * roster calculation code in the tools package to see how this works.
+ *
+ */
 public class GameState {
 	protected Game game;
 	protected int currentTime = 0, currentPeriod = 0;

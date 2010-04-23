@@ -148,6 +148,7 @@ public class BballGeekFile {
 					
 					plays.add(new SubPlay(id, time, activePlayers, inPlayer, outPlayer));
 				} else if(parts[PLAY_TYPE_INDEX].equals(JUMP_BALL_TYPE)) {
+					// TODO: make a play for this
 					plays.add(new TimeChangePlay(id, 0, activePlayers));
 				} else if(parts[PLAY_TYPE_INDEX].equals(TURNOVER_TYPE)) {
 					Player handler = Player.getPlayer(parts[TEAM_INDEX], parts[PLAYER_INDEX]),
