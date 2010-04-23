@@ -9,7 +9,7 @@ import data.GameState;
 public class DataSetRunner {
 
 	public static void run(GameState templateState, String year) {
-		File folder = new File("./data/" + year);
+		File folder = new File("data/" + year);
 		for (File f : folder.listFiles()) {
 			if (!f.getName().endsWith(".csv")) continue;
 			
