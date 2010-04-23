@@ -34,20 +34,6 @@ override one of the public methods, like:
 
 public void shotTaken(Player p, String type, int points, boolean made)
 
-****************************
-* THIS IS STUPIDLY IMPORTANT:
-* YOU MUST OVERRIDE createCopy TO WORK WITHIN MY FRAMEWORK.  
-*
-* createCopy should copy over any data structures that are shared BETWEEN
-* games.  If I'm computing an NBA roster by looking at all players with > 0 minutes,
-* for example, then this roster data structure needs to be shared among all 82
-* games that I analyze, so it gets carried along in createCopy.  Anything
-* specific to one game that doesn't need to be remembered, however, should not 
-* be copied over in this method.  I hope that's clear.  If not, take a look at
-* RosterCalcState.java and, if that fails, how createCopy is actually used in
-* DataSetRunner.
-****************************
-
 ************************** STEP THREE ********************************
 Write a main method that invokes DataSetRunner.
 
@@ -66,6 +52,21 @@ play-by-play data, and call any of the callbacks that you overrode.
 When that finishes, you should (hopefully!) have the data that you're looking 
 for!
 **********************************************************
+
+****************************
+* THIS IS STUPIDLY IMPORTANT:
+* YOU MUST OVERRIDE createCopy TO WORK WITHIN MY FRAMEWORK.  
+*
+* createCopy should copy over any data structures that are shared BETWEEN
+* games.  If I'm computing an NBA roster by looking at all players with > 0 minutes,
+* for example, then this roster data structure needs to be shared among all 82
+* games that I analyze, so it gets carried along in createCopy.  Anything
+* specific to one game that doesn't need to be remembered, however, should not 
+* be copied over in this method.  I hope that's clear.  If not, take a look at
+* RosterCalcState.java and, if that fails, how createCopy is actually used in
+* DataSetRunner.
+****************************
+
 
 If you get confused, take a look at the example code in PMCalc.java, which
 calculates the plus-minus for every player in the league.
