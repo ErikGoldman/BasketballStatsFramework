@@ -4,10 +4,16 @@ public class GameState {
 	protected Game game;
 	protected int currentTime = 0, currentPeriod = 0;
 	
+	protected Player[] activePlayers;
+	
 	protected int homeScore = 0, awayScore = 0;
 
 	public GameState(Game game) {
 		this.game = game;
+	}
+	
+	public GameState createCopy(Game g) {
+		return new GameState(g);
 	}
 	
 	public Game getGame() {
@@ -34,12 +40,15 @@ public class GameState {
 	}
 	
 	public void updateTime(Player[] players, int newTime) {
-		handleTimeChange(players, currentTime, newTime);
+		if (activePlayers != null)
+			handleTimeChange(activePlayers, currentTime, newTime);
+		
+		activePlayers = players;
 		currentTime = newTime;
 	}
 	
-	public void updateScore(String team, int scoreDelta) {
-		handleScoreChange(team, scoreDelta);
+	public void updateScore(String team, Player[] players, int scoreDelta) {
+		handleScoreChange(team, players, scoreDelta);
 		
 		if (game.isHome(team))
 			homeScore += scoreDelta;
@@ -53,5 +62,5 @@ public class GameState {
 	public void rebound(Player out, boolean isOffensive) {}
 	public void foul(Player fouler, Player fouled, String type) {}
 	protected void handleTimeChange(Player[] players, int oldTime, int newTime) {}
-	protected void handleScoreChange(String team, int newScore) {}
+	protected void handleScoreChange(String team, Player[] players, int scoreDelta) {}
 }

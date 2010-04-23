@@ -6,12 +6,17 @@ import data.Player;
 
 public class RosterCalcState extends GameState {
 	
-	RosterCalculator rc;
+	Roster rc;
 	
-	public RosterCalcState(Game g, RosterCalculator rc) {
+	public RosterCalcState(Game g, Roster rc) {
 		super(g);
 		
 		this.rc = rc;
+	}
+	
+	@Override
+	public GameState createCopy(Game g) {
+		return new RosterCalcState(g, rc);
 	}
 
 	@Override

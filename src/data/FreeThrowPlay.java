@@ -16,7 +16,7 @@ public class FreeThrowPlay extends Play {
 	@Override
 	protected void apply(GameState g) {
 		if (made) {
-			g.updateScore(player.getTeam(), 1);
+			g.updateScore(player.getTeam(), activePlayers, 1);
 		}
 		g.freeThrow(player, num, made);
 	}

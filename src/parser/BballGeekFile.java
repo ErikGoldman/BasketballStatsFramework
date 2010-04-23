@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import data.EndOfPeriodPlay;
+import data.TimeChangePlay;
 import data.FoulPlay;
 import data.FreeThrowPlay;
 import data.Game;
@@ -15,6 +15,7 @@ import data.Play;
 import data.Player;
 import data.ReboundPlay;
 import data.ShotPlay;
+import data.SubPlay;
 
 public class BballGeekFile {
 	private static final String HEADER_LINE = "a1,a2,a3,a4,a5,h1,h2,h3,h4,h5,period,time,team,etype,assist,away,block,entered,home,left,num,opponent,outof,player,points,possession,reason,result,steal,type,x,y",
@@ -22,6 +23,8 @@ public class BballGeekFile {
 								REBOUND_TYPE = "rebound",
 								FOUL_TYPE = "foul",
 								FREE_THROW_TYPE = "free throw",
+								SUB_TYPE = "sub",
+								JUMP_BALL_TYPE = "jump ball",
 								OFFENSIVE_REBOUND = "off";
 	
 	private static final int
@@ -30,6 +33,8 @@ public class BballGeekFile {
 					TEAM_INDEX   = 12,
 					PLAY_TYPE_INDEX   = 13,
 					ASSIST_INDEX = 14,
+					SUB_ENTERED_INDEX = 19,
+					SUB_LEFT_INDEX = 19,
 					FT_NUM_INDEX = 20,
 					OPPONENT_INDEX = 21,
 					PLAYER_INDEX = 23,
@@ -61,7 +66,7 @@ public class BballGeekFile {
 			
 			line = br.readLine();
 			if (line == null) {
-				plays.add(new EndOfPeriodPlay(id, getTimeForPeriod(currPeriod), lastPlayers));
+				plays.add(new TimeChangePlay(id, getTimeForPeriod(currPeriod), lastPlayers));
 				break;
 			}
 			
@@ -76,7 +81,7 @@ public class BballGeekFile {
 			
 			int period = Integer.parseInt(parts[PERIOD_INDEX]);
 			if (currPeriod != period) {
-				plays.add(new EndOfPeriodPlay(id, getTimeForPeriod(currPeriod), lastPlayers));
+				plays.add(new TimeChangePlay(id, getTimeForPeriod(currPeriod), lastPlayers));
 				currPeriod = period;
 			}
 			
@@ -130,6 +135,13 @@ public class BballGeekFile {
 					int num = Integer.parseInt(parts[FT_NUM_INDEX]);
 					
 					plays.add(new FreeThrowPlay(id, time, activePlayers, scorer, num, made));
+				} else if(parts[PLAY_TYPE_INDEX].equals(SUB_TYPE)) {
+					Player outPlayer = Player.getPlayer(parts[TEAM_INDEX], parts[SUB_LEFT_INDEX]),
+						    inPlayer = Player.getPlayer(parts[TEAM_INDEX], parts[SUB_ENTERED_INDEX]);
+					
+					plays.add(new SubPlay(id, time, activePlayers, inPlayer, outPlayer));
+				} else if(parts[PLAY_TYPE_INDEX].equals(JUMP_BALL_TYPE)) {
+					plays.add(new TimeChangePlay(id, 0, activePlayers));
 				} else {
 					//System.err.println(parts[PLAY_TYPE_INDEX]);
 				}

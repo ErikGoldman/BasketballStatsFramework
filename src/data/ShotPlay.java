@@ -23,7 +23,7 @@ public class ShotPlay extends Play {
 	@Override
 	protected void apply(GameState g) {
 		if (this.made) {
-			g.updateScore(scorer.getTeam(), points);
+			g.updateScore(scorer.getTeam(), activePlayers, points);
 		}
 		
 		// individual stats
