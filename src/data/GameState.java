@@ -41,6 +41,7 @@ public class GameState {
 	public void timeout(String team, String type) {}
 	public void violation(String team, String type) {}
 	public void ejection(Player ejected, String reason) {}
+	public void gameEnd() {}
 	
 	/*
 	 * This will fire every play, representing the passage of time "between" 
@@ -82,6 +83,7 @@ public class GameState {
 		
 		activePlayers = players;
 		currentTime = newTime;
+		currentPeriod = BballGeekFile.getPeriodForTime(currentTime);
 	}
 	
 	public void updateScore(String team, Player[] players, int scoreDelta) {

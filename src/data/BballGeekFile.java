@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import data.plays.EjectionPlay;
 import data.plays.FoulPlay;
 import data.plays.FreeThrowPlay;
+import data.plays.GameEndPlay;
 import data.plays.Play;
 import data.plays.ReboundPlay;
 import data.plays.ShotPlay;
@@ -68,9 +69,9 @@ public class BballGeekFile {
 		int currPeriod = 1;
 		Player[] lastPlayers = null;
 		
+		String id = f.getName();		
+		
 		while (true) {
-			String id = f.getName();
-			
 			line = br.readLine();
 			if (line == null) {
 				plays.add(new TimeChangePlay(id, getTimeForPeriod(currPeriod), lastPlayers));
@@ -173,6 +174,8 @@ public class BballGeekFile {
 				System.err.println(line);
 			}
 		}
+		
+		plays.add(new GameEndPlay(id, 0, null));
 	}
 	
 	private String[] mySplit(String line) {
@@ -204,8 +207,16 @@ public class BballGeekFile {
 		return plays;
 	}
 	
-	private int getTimeForPeriod(int period) {
+	public static int getTimeForPeriod(int period) {
 		return Math.min(period, 4) * 12 * 60 + Math.max(period - 4, 0) * 5 * 60; 		
+	}
+	public static int getPeriodForTime(int time) {
+		int min = time / 60;
+		
+		if (min <= 48)
+			return min/12 + 1;
+		
+		return 5 + (min - 48) / 5;
 	}
 	
 	private int makeTime(int period, String time) {
